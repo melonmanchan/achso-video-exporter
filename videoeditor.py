@@ -18,7 +18,7 @@ def bake_annotations(video_file, end_point,  annotations):
 
 def generate_pauses(video_clip, annotations):
     """Takes in a regular video clip, and bakes in annotation pauses"""
-    pause_time = 0.4
+    pause_time = 0.8
     last_pause_time = 0
     annotation_amount = len(annotations)
 
@@ -29,13 +29,13 @@ def generate_pauses(video_clip, annotations):
     for index, annotation in enumerate(annotations):
         current_annotation_time = annotation["time"] / 1000.0
 
-        pause_frame = video_clip.to_ImageClip(current_annotation_time)
-        pause_frame = pause_frame.set_start(current_annotation_time)
-        pause_frame = pause_frame.set_end(current_annotation_time + pause_time)
-
         video_part = video_clip.subclip(last_pause_time, current_annotation_time)
         video_part = video_part.set_start(last_pause_time)
         video_part = video_part.set_end(current_annotation_time)
+
+        pause_frame = video_clip.to_ImageClip(current_annotation_time)
+        pause_frame = pause_frame.set_start(current_annotation_time)
+        pause_frame = pause_frame.set_end(current_annotation_time + pause_time)
 
         last_pause_time = current_annotation_time + pause_time
 
@@ -50,14 +50,12 @@ def generate_pauses(video_clip, annotations):
         video_clips.append(video_part)
         video_clips.append(pause_frame)
 
+        # Last annotation has been baked, get the rest of the video
         if index == (annotation_amount - 1):
-            last_part = video_clip.subclip(last_pause_time, video_clip.duration)
+            print("getting end from " +  str(current_annotation_time) + " to " + str(video_clip.duration))
+            last_part = video_clip.subclip(current_annotation_time, video_clip.duration)
             last_part = last_part.set_start(last_pause_time)
             last_part = last_part.set_end(clip_duration)
-            print("appending end")
-            print("end start: " + str(last_part.start))
-            print("end end: " + str(last_part.end))
-            print("end duration: " + str(last_part.duration))
             video_clips.append(last_part)
 
-    return CompositeVideoClip(video_clips).set_duration(clip_duration)
+    return CompositeVideoClip(video_clips)
