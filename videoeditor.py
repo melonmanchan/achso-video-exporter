@@ -12,13 +12,13 @@ def bake_annotations(video_file, end_point,  annotations):
 
     #final_video = CompositeVideoClip(composite_clips)
     final_video = generate_pauses(clip, annotations)
-    final_video.write_videofile("video-out/" + end_point, audio=False)
+    final_video.write_videofile("video-out/" + end_point)
 
 
 def generate_pauses(video_clip, annotations):
     """Takes in a regular video clip, and bakes in annotation pauses"""
-    pause_time = 1
     for annotation in reversed(annotations):
+        pause_time = len(annotation["text"]) * 0.4
         current_annotation_time = annotation["time"] / 1000.0
         video_clip = video_clip.fx(vfx.freeze, t=current_annotation_time, freeze_duration=pause_time)
 
