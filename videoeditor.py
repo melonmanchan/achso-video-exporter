@@ -1,6 +1,5 @@
 from moviepy.editor import *
 
-
 def bake_annotations(video_file, end_point,  annotations):
     clip = VideoFileClip(video_file)
     composite_clips = [clip]
@@ -18,44 +17,9 @@ def bake_annotations(video_file, end_point,  annotations):
 
 def generate_pauses(video_clip, annotations):
     """Takes in a regular video clip, and bakes in annotation pauses"""
-    pause_time = 0.8
-    last_pause_time = 0
-    annotation_amount = len(annotations)
-
-    clip_duration = video_clip.duration + (annotation_amount * pause_time)
-    print("total video duration: " + str(clip_duration))
-    video_clips = []
-
-    for index, annotation in enumerate(annotations):
+    pause_time = 1
+    for annotation in reversed(annotations):
         current_annotation_time = annotation["time"] / 1000.0
+        video_clip = video_clip.fx(vfx.freeze, t=current_annotation_time, freeze_duration=pause_time)
 
-        video_part = video_clip.subclip(last_pause_time, current_annotation_time)
-        video_part = video_part.set_start(last_pause_time)
-        video_part = video_part.set_end(current_annotation_time)
-
-        pause_frame = video_clip.to_ImageClip(current_annotation_time)
-        pause_frame = pause_frame.set_start(current_annotation_time)
-        pause_frame = pause_frame.set_end(current_annotation_time + pause_time)
-
-        last_pause_time = current_annotation_time + pause_time
-
-        print("part clip start: " + str(video_part.start))
-        print("part clip end " + str(video_part.end))
-        print("part clip duration " + str(video_part.duration))
-
-        print("annotation clip start: " + str(pause_frame.start))
-        print("annotation clip end " + str(pause_frame.end))
-        print("annotation clip duration " + str(pause_frame.duration))
-
-        video_clips.append(video_part)
-        video_clips.append(pause_frame)
-
-        # Last annotation has been baked, get the rest of the video
-        if index == (annotation_amount - 1):
-            print("getting end from " +  str(current_annotation_time) + " to " + str(video_clip.duration))
-            last_part = video_clip.subclip(current_annotation_time, video_clip.duration)
-            last_part = last_part.set_start(last_pause_time)
-            last_part = last_part.set_end(clip_duration)
-            video_clips.append(last_part)
-
-    return CompositeVideoClip(video_clips)
+    return video_clip
