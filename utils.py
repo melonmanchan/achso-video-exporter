@@ -10,5 +10,4 @@ def download_file(url, end_point):
                 f.write(chunk)
     return "video-cache/" + end_point
 
-def sort_annotations_by_time(annotations):
-    return sorted(annotations, key=lambda k: k["time"])
+

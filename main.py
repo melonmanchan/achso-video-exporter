@@ -3,7 +3,8 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
-from utils import download_file, sort_annotations_by_time
+from utils import download_file
+from annotations import sort_annotations_by_time
 from videoeditor import bake_annotations
 
 app = Flask(__name__)
