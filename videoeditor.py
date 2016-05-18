@@ -1,14 +1,14 @@
 from moviepy.editor import *
-from annotations import get_annotation_duration, get_subtitle, get_marker
+from annotations import get_annotation_duration, get_annotations_added_duration, get_subtitle, get_marker
 
-
-marker_image = ImageClip("AS_annotation.png")
 
 def bake_annotations(video_file, end_point, annotations):
     clip = VideoFileClip(video_file)
     annotated_video = generate_annotation_markings(clip, annotations)
-    paused_video = generate_pauses(annotated_video, annotations)
-    paused_video.write_videofile("video-out/" + end_point)
+    final_video = generate_video_pauses(annotated_video, annotations)
+    final_video_audio = generate_pause_audio(clip.audio, annotations)
+    final_video.set_audio(final_video_audio)
+    final_video.write_videofile("video-out/" + end_point)
 
 
 def generate_annotation_markings(video_clip, annotations):
@@ -24,7 +24,7 @@ def generate_annotation_markings(video_clip, annotations):
     return CompositeVideoClip(composite_clips)
 
 
-def generate_pauses(video_clip, annotations):
+def generate_video_pauses(video_clip, annotations):
     """Takes in a regular video clip, and bakes in annotation pauses"""
     for annotation in reversed(annotations):
         pause_time = get_annotation_duration(annotation)
@@ -33,4 +33,24 @@ def generate_pauses(video_clip, annotations):
 
     return video_clip
 
+
+def generate_pause_audio(original_audio, annotations):
+    audio_clip = original_audio
+    last_pause_time = 0
+    audio_parts = []
+
+    for annotation in annotations:
+        pause_time = get_annotation_duration(annotation)
+        current_annotation_time = annotation["time"] / 1000.0
+
+        audio_part = audio_clip.subclip(last_pause_time, current_annotation_time)
+        audio_part = audio_part.set_start(last_pause_time)
+        audio_part = audio_part.set_end(current_annotation_time)
+        audio_parts.append(audio_part)
+
+        last_pause_time = current_annotation_time + pause_time
+
+    comp = CompositeAudioClip(audio_parts)
+
+    return comp
 

@@ -11,7 +11,7 @@ def get_annotations_added_duration(annotations):
 
 
 def get_annotation_duration(annotation):
-    return (len(annotation["text"]) * 0.4)
+    return len(annotation["text"]) * 0.4
 
 
 def sort_annotations_by_time(annotations):
