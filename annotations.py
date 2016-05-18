@@ -2,6 +2,7 @@ from moviepy.editor import *
 
 marker_image = ImageClip("AS_annotation.png")
 
+
 def get_annotations_added_duration(annotations):
     duration = 0
     for annotation in annotations:
@@ -18,8 +19,8 @@ def sort_annotations_by_time(annotations):
 
 
 def get_marker_absolute_pos(marker_position, clip):
-    marker_x = marker_position["x"] * clip.w
-    marker_y = marker_position["y"] * clip.h
+    marker_x = (marker_position["x"] * clip.w) - marker_image.w / 2
+    marker_y = (marker_position["y"] * clip.h) - marker_image.h / 2
     return marker_x, marker_y
 
 
