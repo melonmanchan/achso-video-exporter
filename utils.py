@@ -11,3 +11,7 @@ def download_file(url, end_point):
     return "video-cache/" + end_point
 
 
+def is_annotation_json_valid(json_payload):
+    if not json_payload["videoUri"] or not json_payload["title"]:
+        return False
+    return True
