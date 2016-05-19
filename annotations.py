@@ -42,3 +42,10 @@ def get_marker(annotation, marker_duration, video_clip):
 
     return marker
 
+
+def is_annotation_json_valid(annotations):
+    for annotation in annotations:
+        if not all(k in annotation for k in ("time", "position")):
+            return False
+    return True
+

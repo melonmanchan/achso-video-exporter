@@ -4,7 +4,7 @@ from flask import Flask
 from flask import request
 from flask import jsonify
 from utils import download_file, is_video_json_valid
-from annotations import sort_annotations_by_time
+from annotations import sort_annotations_by_time, is_annotation_json_valid
 from videoeditor import bake_annotations
 
 app = Flask(__name__)
@@ -19,7 +19,7 @@ def index():
         request_json = [request_json]
 
     for video_json in request_json:
-        if not is_video_json_valid(video_json):
+        if not is_video_json_valid(video_json) or not is_annotation_json_valid(video_json["annotations"]):
             return jsonify({"message": "Annotation json was malformed"}), 400
         else :
             video_uri = video_json["videoUri"]
