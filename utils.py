@@ -24,3 +24,8 @@ def delete_dir(dir_to_delete):
 def zip_up_dir(folder_to_zip, zip_endpoint):
     shutil.make_archive(zip_endpoint, 'zip', folder_to_zip)
 
+
+def is_video_json_valid(json_payload):
+    if not json_payload["videoUri"] or not json_payload["title"]:
+        return False
+    return True
