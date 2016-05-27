@@ -31,8 +31,7 @@ def index():
         zip_up_dir(export_dir_name, 'video-exports/' + video_json["title"])
         delete_dir(export_dir_name)
 
-
-    return jsonify({"message": "Annotated video created succesfully"})
+    return jsonify({"message": "Annotated video created successfully"})
 
 if __name__ == "__main__":
     app.run(debug=True)
