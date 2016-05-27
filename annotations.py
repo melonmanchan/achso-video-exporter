@@ -25,7 +25,7 @@ def get_marker_absolute_pos(marker_position, clip):
 
 
 def get_subtitle(annotation, sub_duration):
-    txt_clip = TextClip(annotation["text"], color="white", fontsize=70)
+    txt_clip = TextClip(annotation["text"], color="white", fontsize=70, font='Sans Serif')
     txt_clip = txt_clip.set_position(("center", "bottom"))
     txt_clip = txt_clip.set_start(float(annotation["time"]) / 1000.0)
     txt_clip = txt_clip.set_duration(sub_duration)
