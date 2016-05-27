@@ -1,13 +1,26 @@
 import requests
+import shutil
+import tempfile
 
 
 def download_file(url, end_point):
     """Downloads a file by streaming using the requests module"""
     r = requests.get(url, stream=True)
-    with open("video-cache/" + end_point, "wb") as f:
+    with open(end_point, "wb") as f:
         for chunk in r.iter_content(chunk_size=1024):
             if chunk:
                 f.write(chunk)
-    return "video-cache/" + end_point
+    return end_point
 
+
+def create_temp_dir():
+    return tempfile.mkdtemp(suffix='video-exports')
+
+
+def delete_dir(dir_to_delete):
+    shutil.rmtree(dir_to_delete)
+
+
+def zip_up_dir(folder_to_zip, zip_endpoint):
+    shutil.make_archive(zip_endpoint, 'zip', folder_to_zip)
 

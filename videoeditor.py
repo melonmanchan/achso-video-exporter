@@ -8,7 +8,7 @@ def bake_annotations(video_file, end_point, annotations):
     final_video = generate_video_pauses(annotated_video, annotations)
     final_video_audio = generate_pause_audio(clip.audio, annotations)
     final_video.set_audio(final_video_audio)
-    final_video.write_videofile("video-out/" + end_point)
+    final_video.write_videofile(end_point)
 
 
 def generate_annotation_markings(video_clip, annotations):
