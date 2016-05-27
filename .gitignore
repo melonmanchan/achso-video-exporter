@@ -64,3 +64,4 @@ target/
 
 video-cache/*
 video-out/*
+video-exports/*
