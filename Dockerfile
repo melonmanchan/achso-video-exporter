@@ -1,7 +1,7 @@
 FROM python:3.4
 
 RUN apt-get update
-RUN apt-get install -y ghostscript imagemagick libav-tools
+RUN apt-get install -y ghostscript imagemagick libav-tools libavcodec-extra
 RUN mkdir /achso-video-exporter
 ADD . /achso-video-exporter
 WORKDIR /achso-video-exporter
