@@ -1,6 +1,6 @@
 from moviepy.editor import *
 from annotations import get_annotation_duration, get_annotations_added_duration, get_subtitle, get_marker
-
+import uuid
 
 def bake_annotations(video_file, end_point, annotations):
     clip = VideoFileClip(video_file)
@@ -9,7 +9,7 @@ def bake_annotations(video_file, end_point, annotations):
     audio = clip.audio.set_duration(clip.audio.duration + get_annotations_added_duration(annotations))
     final_video_audio = generate_pause_audio(audio, annotations)
     final_video.set_audio(final_video_audio)
-    final_video.write_videofile(end_point, codec='libx264', audio_codec='aac', temp_audiofile='temp-audio.m4a')
+    final_video.write_videofile(end_point, codec='libx264', audio_codec='aac', temp_audiofile='temp-audio-' + str(uuid.uuid4()) + '.m4a')
 
 
 def generate_annotation_markings(video_clip, annotations):
