@@ -6,7 +6,7 @@ from flask import jsonify
 
 import uuid
 
-from utils import download_file, create_temp_dir, zip_up_dir, delete_dir, is_video_json_valid
+from utils import download_file, create_temp_dir, zip_up_dir, delete_dir, is_video_json_valid, delete_file
 from annotations import sort_annotations_by_time, is_annotation_json_valid
 
 from videoeditor import bake_annotations
@@ -37,6 +37,7 @@ def index():
             video_location = download_file(video_uri, "../video-cache/" + video_filename)
             sorted_annotations = sort_annotations_by_time(video_json["annotations"])
             bake_annotations(video_location, export_dir_name + "/" + video_json["title"] + ".mp4", sorted_annotations)
+            delete_file("../video-cache/" + video_filename)
 
     zip_up_dir(export_dir_name, '../video-exports/AchSo-Video-Export-' + str(uuid.uuid4()))
     delete_dir(export_dir_name)

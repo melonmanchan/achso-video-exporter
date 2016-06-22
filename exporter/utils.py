@@ -1,3 +1,4 @@
+import os
 import requests
 import shutil
 import tempfile
@@ -15,6 +16,10 @@ def download_file(url, end_point):
 
 def create_temp_dir():
     return tempfile.mkdtemp(suffix='video-exports-')
+
+
+def delete_file(file_to_delete):
+    os.remove(file_to_delete)
 
 
 def delete_dir(dir_to_delete):
