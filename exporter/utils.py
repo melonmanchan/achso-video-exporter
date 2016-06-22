@@ -14,7 +14,7 @@ def download_file(url, end_point):
 
 
 def create_temp_dir():
-    return tempfile.mkdtemp(suffix='video-exports')
+    return tempfile.mkdtemp(suffix='video-exports-')
 
 
 def delete_dir(dir_to_delete):

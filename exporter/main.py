@@ -34,11 +34,11 @@ def index():
         else:
             video_uri = video_json["videoUri"]
             video_filename = video_uri.rsplit("/")[-1]
-            video_location = download_file(video_uri, "video-cache/" + video_filename)
+            video_location = download_file(video_uri, "../video-cache/" + video_filename)
             sorted_annotations = sort_annotations_by_time(video_json["annotations"])
             bake_annotations(video_location, export_dir_name + "/" + video_json["title"] + ".mp4", sorted_annotations)
 
-    zip_up_dir(export_dir_name, 'video-exports/AchSo-Video-Export' + str(uuid.uuid4()))
+    zip_up_dir(export_dir_name, '../video-exports/AchSo-Video-Export-' + str(uuid.uuid4()))
     delete_dir(export_dir_name)
     return jsonify({"message": "Annotated video created successfully"})
 
