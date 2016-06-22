@@ -9,4 +9,4 @@ RUN /usr/local/bin/pip install -r requirements.txt
 
 EXPOSE 5000
 
-CMD ["python", "/achso-video-exporter/main.py"]
+CMD ["python", "/achso-video-exporter/exporter/main.py"]
