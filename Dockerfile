@@ -1,12 +1,11 @@
-FROM python:3.4
+FROM dkarchmervue/python27-ffmpeg
 
 RUN apt-get update
-RUN apt-get install -y ghostscript imagemagick libav-tools libavcodec-extra
+RUN apt-get install -y ghostscript imagemagick
 RUN mkdir /achso-video-exporter
 ADD . /achso-video-exporter
 WORKDIR /achso-video-exporter
-RUN cp ./policy.xml /etc/ImageMagick-6/policy.xml
-RUN /usr/local/bin/pip3 install -r requirements.txt
+RUN /usr/local/bin/pip install -r requirements.txt
 
 EXPOSE 5000
 
