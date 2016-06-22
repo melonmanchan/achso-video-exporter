@@ -65,3 +65,4 @@ target/
 video-cache/*
 video-out/*
 video-exports/*
+exporter/local_config.py

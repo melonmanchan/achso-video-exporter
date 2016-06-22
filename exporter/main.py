@@ -11,6 +11,8 @@ from annotations import sort_annotations_by_time, is_annotation_json_valid
 
 from videoeditor import bake_annotations
 
+import config
+
 app = Flask(__name__)
 
 
@@ -44,4 +46,4 @@ def index():
     return jsonify({"message": "Annotated video created successfully"})
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=config.DEBUG, host=config.HOST, port=config.PORT)
