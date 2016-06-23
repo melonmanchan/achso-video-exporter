@@ -45,8 +45,8 @@ def index():
     export_zip_name = '../video-exports/AchSo-Video-Export-' + str(uuid.uuid4())
     export_zip_name = zip_up_dir(export_dir_name, export_zip_name)
     delete_dir(export_dir_name)
-    upload_file(export_zip_name)
-    return jsonify({"message": "Annotated video created successfully"})
+    response, url = upload_file(export_zip_name)
+    return jsonify({"message": "Annotated video created successfully", "url": url})
 
 if __name__ == "__main__":
     app.run(debug=config.DEBUG, host=config.HOST, port=config.PORT)
