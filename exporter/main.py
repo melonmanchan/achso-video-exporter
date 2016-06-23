@@ -9,6 +9,7 @@ import uuid
 from utils import download_file, create_temp_dir, zip_up_dir, delete_dir, is_video_json_valid, delete_file
 from annotations import sort_annotations_by_time, is_annotation_json_valid
 from s3 import upload_file
+from mailer import send_download_link
 
 from videoeditor import bake_annotations
 
@@ -47,6 +48,7 @@ def index():
     delete_dir(export_dir_name)
     response, url = upload_file(export_zip_name)
     delete_file(export_zip_name)
+    send_download_link("matti.jokitulppo@aalto.fi", url)
     return jsonify({"message": "Annotated video created successfully", "url": url})
 
 if __name__ == "__main__":
