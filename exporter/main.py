@@ -21,13 +21,21 @@ app = Flask(__name__)
 @app.route("/", methods=["POST"])
 def index():
     request_json = request.get_json()
+    if not "email" in request_json:
+        return jsonify({"message": "Email address of recipient was missing!"}), 400
+
+    if not "videos" in request_json:
+        return jsonify({"message": "Videos to export were missing!"}), 400
+
+    email = request_json["email"]
+    videos = request_json["videos"]
 
     # Allow both plain JSON objects and arrays
-    if type(request_json) is dict:
-        request_json = [request_json]
+    if type(videos) is dict:
+        videos = [videos]
 
     export_dir_name = create_temp_dir()
-    for video_json in request_json:
+    for video_json in videos:
         if not is_video_json_valid(video_json):
             return jsonify({"message": "A video json was malformed"}), 400
         if not video_json["annotations"]:
@@ -46,9 +54,12 @@ def index():
     export_zip_name = '../video-exports/AchSo-Video-Export-' + str(uuid.uuid4())
     export_zip_name = zip_up_dir(export_dir_name, export_zip_name)
     delete_dir(export_dir_name)
+
     response, url = upload_file(export_zip_name)
     delete_file(export_zip_name)
-    send_download_link("matti.jokitulppo@aalto.fi", url)
+
+    send_download_link(email, url)
+
     return jsonify({"message": "Annotated video created successfully", "url": url})
 
 if __name__ == "__main__":
