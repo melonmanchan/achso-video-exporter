@@ -46,6 +46,7 @@ def index():
     export_zip_name = zip_up_dir(export_dir_name, export_zip_name)
     delete_dir(export_dir_name)
     response, url = upload_file(export_zip_name)
+    delete_file(export_zip_name)
     return jsonify({"message": "Annotated video created successfully", "url": url})
 
 if __name__ == "__main__":
