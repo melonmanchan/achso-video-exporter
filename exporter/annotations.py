@@ -1,6 +1,7 @@
 from moviepy.editor import *
+import os
 
-marker_image = ImageClip("AS_annotation_small.png")
+marker_image = ImageClip(os.path.join(os.path.dirname(__file__), "./AS_annotation_small.png"))
 
 
 def get_annotations_added_duration(annotations):
