@@ -1,4 +1,5 @@
 FROM dkarchmervue/python27-ffmpeg
+RUN apt-get install -y python-software-properties
 
 RUN add-apt-repository ppa:chris-lea/redis-server
 RUN apt-get update
