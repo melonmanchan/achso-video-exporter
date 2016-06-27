@@ -4,7 +4,7 @@ RUN apt-get install -y software-properties-common
 
 RUN add-apt-repository ppa:chris-lea/redis-server
 RUN apt-get update
-RUN apt-get install -y ghostscript imagemagick redis-server
+RUN apt-get install -y ghostscript redis-server
 RUN pip install supervisor
 
 RUN mkdir /achso-video-exporter
