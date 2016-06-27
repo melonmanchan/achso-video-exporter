@@ -21,6 +21,7 @@ app = Flask(__name__)
 celery = make_celery(app)
 
 
+# Exporting videos is performed in seperate thread from main server
 @celery.task(name='exporter.tasks.export_videos')
 def export_videos(videos, email):
     export_dir_name = create_temp_dir()
@@ -48,7 +49,6 @@ def export_videos(videos, email):
     delete_file(export_zip_name)
 
     send_download_link(email, url)
-
 
 
 @app.route("/", methods=["POST"])
