@@ -13,7 +13,9 @@ moviepy==0.2.2.11
 numpy==1.11.0
 Pillow==3.2.0
 python-dateutil==2.5.3
+python-http-client==2.1.0
 requests==2.10.0
+sendgrid==3.0.0
 six==1.10.0
 tqdm==4.5.0
 Werkzeug==0.11.9
