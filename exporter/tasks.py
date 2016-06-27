@@ -4,7 +4,7 @@ import config as config
 
 def make_celery(app):
     celery = Celery(app.import_name, backend=config.CELERY_RESULT_BACKEND, broker=config.CELERY_BROKER_URL)
-    celery.conf.update(app.config)
+    celery.conf.update(CELERY_ACCEPT_CONTENT=['json'], CELERY_TASK_SERIALIZER='json', CELERY_RESULT_SERIALIZER='json')
 
     TaskBase = celery.Task
 
