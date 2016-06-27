@@ -4,4 +4,4 @@ service supervisor stop
 service supervisor start
 
 supervisorctl start celery
-python /achso-video/exporter/main.py
+python /achso-video-exporter/exporter/main.py
