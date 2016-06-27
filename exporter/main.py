@@ -38,10 +38,10 @@ def index():
     for video_json in videos:
         if not is_video_json_valid(video_json):
             return jsonify({"message": "A video json was malformed"}), 400
-        if not video_json["annotations"]:
-            # TODO: Handle video with no annotations
+        elif not "annotations" in video_json or not video_json["annotations"]:
+            download_file(video_json["videoUri"], export_dir_name + "/" + video_json["title"] + ".mp4")
             break
-        if not is_annotation_json_valid(video_json["annotations"]):
+        elif not is_annotation_json_valid(video_json["annotations"]):
             return jsonify({"message": "An annotation json was malformed"}), 400
         else:
             video_uri = video_json["videoUri"]
