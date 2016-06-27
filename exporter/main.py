@@ -21,10 +21,10 @@ app = Flask(__name__)
 @app.route("/", methods=["POST"])
 def index():
     request_json = request.get_json()
-    if not "email" in request_json:
+    if "email" not in request_json:
         return jsonify({"message": "Email address of recipient was missing!"}), 400
 
-    if not "videos" in request_json:
+    if "videos" not in request_json:
         return jsonify({"message": "Videos to export were missing!"}), 400
 
     email = request_json["email"]
@@ -38,7 +38,7 @@ def index():
     for video_json in videos:
         if not is_video_json_valid(video_json):
             return jsonify({"message": "A video json was malformed"}), 400
-        elif not "annotations" in video_json or not video_json["annotations"]:
+        elif "annotations" not in video_json or not video_json["annotations"]:
             download_file(video_json["videoUri"], export_dir_name + "/" + video_json["title"] + ".mp4")
             break
         elif not is_annotation_json_valid(video_json["annotations"]):
