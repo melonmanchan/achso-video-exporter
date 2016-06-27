@@ -22,28 +22,7 @@ celery = make_celery(app)
 
 
 @celery.task(name='exporter.tasks.export_videos')
-def export_videos():
-    print("HELLO")
-
-
-@app.route("/", methods=["POST"])
-def index():
-    request_json = request.get_json()
-
-    result = export_videos.delay()
-    if "email" not in request_json:
-        return jsonify({"message": "Email address of recipient was missing!"}), 400
-
-    if "videos" not in request_json:
-        return jsonify({"message": "Videos to export were missing!"}), 400
-
-    email = request_json["email"]
-    videos = request_json["videos"]
-
-    # Allow both plain JSON objects and arrays
-    if type(videos) is dict:
-        videos = [videos]
-
+def export_videos(videos, email):
     export_dir_name = create_temp_dir()
     for video_json in videos:
         if not is_video_json_valid(video_json):
@@ -70,7 +49,34 @@ def index():
 
     send_download_link(email, url)
 
-    return jsonify({"message": "Annotated video created successfully", "url": url})
+
+
+@app.route("/", methods=["POST"])
+def index():
+    request_json = request.get_json()
+
+    if "email" not in request_json:
+        return jsonify({"message": "Email address of recipient was missing!"}), 400
+
+    if "videos" not in request_json:
+        return jsonify({"message": "Videos to export were missing!"}), 400
+
+    email = request_json["email"]
+    videos = request_json["videos"]
+
+    # Allow both plain JSON objects and arrays
+    if type(videos) is dict:
+        videos = [videos]
+
+    for video_json in videos:
+        if not is_video_json_valid(video_json):
+            return jsonify({"message": "A video json was malformed"}), 400
+        elif not is_annotation_json_valid(video_json["annotations"]):
+            return jsonify({"message": "An annotation json was malformed"}), 400
+
+    export_videos.delay(videos, email)
+
+    return jsonify({"message": "Video export queued succesfully"}), 201
 
 if __name__ == "__main__":
     app.run(debug=config.DEBUG, host=config.HOST, port=config.PORT)
