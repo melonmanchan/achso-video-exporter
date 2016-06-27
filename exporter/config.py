@@ -2,6 +2,9 @@ DEBUG = True
 HOST = '0.0.0.0'
 PORT = 5000
 
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
 S3_BUCKET_NAME = 'aalto-achso-exports'
 S3_BUCKET_REGION = 'eu-central-1'
 S3_ACCESS_KEY = ''
