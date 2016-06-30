@@ -19,7 +19,8 @@ def generate_annotation_markings(video_clip, annotations):
     for annotation in annotations:
         txt_clip = get_subtitle(annotation, one_frame_time)
         marker = get_marker(annotation, one_frame_time, video_clip)
-        composite_clips.append(txt_clip)
+        if txt_clip is not None:
+            composite_clips.append(txt_clip)
         composite_clips.append(marker)
 
     return CompositeVideoClip(composite_clips)
