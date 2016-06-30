@@ -3,16 +3,21 @@ import os
 
 marker_image = ImageClip(os.path.join(os.path.dirname(__file__), "./AS_annotation_small.png"))
 
+ANNOTATION_INITIAL_PAUSE_TIME = 1.0
+
 
 def get_annotations_added_duration(annotations):
-    duration = 0
+    if (len(annotations)) == 0:
+        return ANNOTATION_INITIAL_PAUSE_TIME
+
+    duration = 0;
     for annotation in annotations:
         duration += get_annotation_duration(annotation)
     return duration
 
 
 def get_annotation_duration(annotation):
-    return len(annotation["text"]) * 0.4
+    return ANNOTATION_INITIAL_PAUSE_TIME + len(annotation["text"]) * 0.4
 
 
 def sort_annotations_by_time(annotations):
