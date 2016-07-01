@@ -1,5 +1,7 @@
 import sendgrid
 import config as config
+from utils import parse_iso_date
+
 from sendgrid.helpers.mail import  Mail, Content
 
 sg = sendgrid.SendGridAPIClient(apikey=config.SENDGRID_API_KEY)
@@ -13,7 +15,7 @@ def render_download_link(link):
 def render_list_elements(elements):
     output = ""
     for el in elements:
-        output += "<li>{0}</li>".format(el)
+        output += "<li>{0} (Last updated at {1})</li>".format(el["title"], parse_iso_date(el["date"]))
     return output
 
 
@@ -36,7 +38,6 @@ def render_failure(data):
 
 
 def render_mail_content(data):
-    print(data)
     content = """"<html>
                          <h1>Your videos are ready</h1>
                          <p>Hello! Your download link is {0}</>

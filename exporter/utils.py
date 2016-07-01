@@ -2,7 +2,7 @@ import os
 import requests
 import shutil
 import tempfile
-
+import dateutil.parser
 
 def download_file(url, end_point):
     """Downloads a file by streaming using the requests module"""
@@ -35,3 +35,12 @@ def is_video_json_valid(json_payload):
     if not json_payload["videoUri"] or not json_payload["title"]:
         return False
     return True
+
+
+def parse_iso_date(date):
+    if date is None:
+        return "an unknown time"
+
+    parsed = dateutil.parser.parse(date)
+
+    return parsed.strftime("%Y.%m.%d %H:%M:%S")

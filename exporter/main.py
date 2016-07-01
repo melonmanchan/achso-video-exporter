@@ -44,10 +44,10 @@ def export_videos(videos, email):
                 bake_annotations(video_location, export_dir_name + "/" + video_json["title"] + ".mp4", sorted_annotations)
                 delete_file("../video-cache/" + video_filename)
 
-                export_results["succeeded"].append(video_json["title"])
+                export_results["succeeded"].append({"title": video_json["title"], "date": video_json["date"]})
         except Exception, e:
             print("EXPORT FAILURE: " + repr(e))
-            export_results["failed"].append(video_json["title"])
+            export_results["failed"].append({"title": video_json["title"], "date": video_json["date"]})
 
     export_zip_name = '../video-exports/AchSo-Video-Export-' + str(uuid.uuid4())
     export_zip_name = zip_up_dir(export_dir_name, export_zip_name)
