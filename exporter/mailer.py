@@ -18,16 +18,31 @@ def render_list_elements(elements):
 
 
 def render_list(data):
-    return "<ul> </ul>".format(render_list_elements(data))
+    return "<ul>{0}</ul>".format(render_list_elements(data))
+
+
+def render_success(data):
+    if len(data["succeeded"]) == 0:
+        return ""
+    else:
+        return "<h2>The download contains the following videos: </h2>{0}".format(render_list(data["succeeded"]))
+
+
+def render_failure(data):
+    if len(data["failed"]) == 0:
+        return ""
+    else:
+        return "<h2>Unfortunately, exporting the following videos failed: </h2>{0}".format(render_list(data["failed"]))
 
 
 def render_mail_content(data):
+    print(data)
     content = """"<html>
                          <h1>Your videos are ready</h1>
                          <p>Hello! Your download link is {0}</>
-                         <h2>The download contains the following videos:</h2>
                          {1}
-                  </html>""".format(render_download_link(data["url"]), render_list_elements(data["succeeded"]))
+                         {2}
+                  </html>""".format(render_download_link(data["url"]), render_success(data), render_failure(data))
 
     return Content("text/html", content)
 
@@ -35,7 +50,7 @@ def render_mail_content(data):
 def send_download_link(to, export_results):
     to_mail = sendgrid.Email(to)
     content = render_mail_content(export_results)
-    message = Mail(from_email=from_mail, subject='Your AchSo! video export is ready',
+    message = Mail(from_email=from_mail, subject='Your AchSo! video export is finished',
                    to_email=to_mail, content=content)
     resp = sg.client.mail.send.post(request_body=message.get())
 
