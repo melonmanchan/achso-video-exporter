@@ -34,8 +34,6 @@ def export_videos(videos, email):
             elif "annotations" not in video_json or not video_json["annotations"]:
                 download_file(video_json["videoUri"], export_dir_name + "/" + video_json["title"] + ".mp4")
                 break
-            elif not is_annotation_json_valid(video_json["annotations"]):
-                return jsonify({"message": "An annotation json was malformed"}), 400
             else:
                 video_uri = video_json["videoUri"]
                 video_filename = video_uri.rsplit("/")[-1]
