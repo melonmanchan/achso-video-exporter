@@ -49,14 +49,14 @@ def export_videos(videos, email):
 
     export_zip_name = '../video-exports/AchSo-Video-Export-' + str(uuid.uuid4())
     export_zip_name = zip_up_dir(export_dir_name, export_zip_name)
-    # delete_dir(export_dir_name)
+    delete_dir(export_dir_name)
 
-    #response, url = upload_file(export_zip_name)
-    #delete_file(export_zip_name)
+    response, url = upload_file(export_zip_name)
+    delete_file(export_zip_name)
 
-    #export_results["url"] = url
+    export_results["url"] = url
 
-    # send_download_link(email, export_results)
+    send_download_link(email, export_results)
 
 
 @app.route("/", methods=["POST"])
