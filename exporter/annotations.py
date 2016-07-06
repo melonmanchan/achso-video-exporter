@@ -4,6 +4,14 @@ import os
 marker_image = ImageClip(os.path.join(os.path.dirname(__file__), "./AS_annotation_small.png"))
 
 ANNOTATION_INITIAL_PAUSE_TIME = 1.0
+SUBTILE_OFFSET = 70
+
+
+def get_subtitle_offset(annotation, seen_annotations, clip):
+    if not annotation["time"] in seen_annotations:
+        return clip.h - SUBTILE_OFFSET
+    else:
+        return clip.h - SUBTILE_OFFSET * (seen_annotations[annotation["time"]] + 1)
 
 
 def get_annotations_added_duration(annotations):
@@ -30,12 +38,12 @@ def get_marker_absolute_pos(marker_position, clip):
     return marker_x, marker_y
 
 
-def get_subtitle(annotation, sub_duration):
+def get_subtitle(annotation, sub_duration, video_clip, seen_annotations):
     if len(annotation["text"]) == 0:
         return None
 
     txt_clip = TextClip(annotation["text"], color="white", fontsize=70, font='Sans Serif')
-    txt_clip = txt_clip.set_position(("center", "bottom"))
+    txt_clip = txt_clip.set_position(("center", get_subtitle_offset(annotation, seen_annotations, video_clip)))
     txt_clip = txt_clip.set_start(float(annotation["time"]) / 1000.0)
     txt_clip = txt_clip.set_duration(sub_duration)
 

@@ -2,6 +2,7 @@ from moviepy.editor import *
 from annotations import get_annotation_duration, get_annotations_added_duration, get_subtitle, get_marker
 import uuid
 
+
 def bake_annotations(video_file, end_point, annotations):
     clip = VideoFileClip(video_file)
     annotated_video = generate_annotation_markings(clip, annotations)
@@ -12,16 +13,29 @@ def bake_annotations(video_file, end_point, annotations):
     final_video.write_videofile(end_point, codec='libx264', audio_codec='aac', temp_audiofile='temp-audio-' + str(uuid.uuid4()) + '.m4a')
 
 
+def update_seen_annotations(annotation, seen_annotations):
+    if not annotation["time"] in seen_annotations:
+        seen_annotations[annotation["time"]] = 1
+    else:
+        seen_annotations[annotation["time"]] += 1
+
+
+
+
 def generate_annotation_markings(video_clip, annotations):
+    seen_annotations = {}
     composite_clips = [video_clip]
     one_frame_time = 1 / video_clip.fps
 
     for annotation in annotations:
-        txt_clip = get_subtitle(annotation, one_frame_time)
+        txt_clip = get_subtitle(annotation, one_frame_time, video_clip, seen_annotations)
         marker = get_marker(annotation, one_frame_time, video_clip)
         if txt_clip is not None:
             composite_clips.append(txt_clip)
         composite_clips.append(marker)
+
+        update_seen_annotations(annotation, seen_annotations)
+        print(seen_annotations)
 
     return CompositeVideoClip(composite_clips)
 
