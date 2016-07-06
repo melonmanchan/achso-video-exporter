@@ -38,7 +38,7 @@ def render_failure(data):
 
 
 def render_mail_content(data):
-    content = """"<html>
+    content = """<html>
                          <h1>Your videos are ready</h1>
                          <p>Hello! Your download link is {0}</>
                          {1}
