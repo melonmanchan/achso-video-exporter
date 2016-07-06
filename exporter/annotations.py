@@ -26,7 +26,7 @@ def get_annotations_added_duration(annotations):
     if (len(annotations)) == 0:
         return ANNOTATION_INITIAL_PAUSE_TIME
 
-    duration = 0;
+    duration = 0
     for annotation in annotations:
         duration += get_annotation_duration(annotation)
     return duration
@@ -52,7 +52,7 @@ def calculate_needed_subtitle_height(seen_annotations, annotation, video_clip):
 
     if len(text) > width / 40:
         text, lines_inserted = newlinify_string(text, int(width / 40))
-        add_to_subtitle_offset(annotation, seen_annotations, lines_inserted)
+        add_to_subtitle_offset(annotation, seen_annotations, lines_inserted - 1)
 
     return text
 
