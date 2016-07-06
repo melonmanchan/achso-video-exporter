@@ -1,3 +1,4 @@
+from utils import newlinify_string
 from moviepy.editor import *
 import os
 
@@ -14,6 +15,13 @@ def get_subtitle_offset(annotation, seen_annotations, clip):
         return clip.h - SUBTILE_OFFSET * (seen_annotations[annotation["time"]] + 1)
 
 
+def add_to_subtitle_offset(annotation, seen_annotations, value):
+    if not annotation["time"] in seen_annotations:
+        seen_annotations[annotation["time"]] = value
+    else:
+        seen_annotations[annotation["time"]] += value
+
+
 def get_annotations_added_duration(annotations):
     if (len(annotations)) == 0:
         return ANNOTATION_INITIAL_PAUSE_TIME
@@ -25,7 +33,7 @@ def get_annotations_added_duration(annotations):
 
 
 def get_annotation_duration(annotation):
-    return ANNOTATION_INITIAL_PAUSE_TIME + len(annotation["text"]) * 0.4
+    return ANNOTATION_INITIAL_PAUSE_TIME + len(annotation["text"]) * 0.2
 
 
 def sort_annotations_by_time(annotations):
@@ -38,11 +46,24 @@ def get_marker_absolute_pos(marker_position, clip):
     return marker_x, marker_y
 
 
+def calculate_needed_subtitle_height(seen_annotations, annotation, video_clip):
+    width = video_clip.w
+    text = annotation["text"]
+
+    if len(text) > width / 40:
+        text, lines_inserted = newlinify_string(text, int(width / 40))
+        add_to_subtitle_offset(annotation, seen_annotations, lines_inserted)
+
+    return text
+
+
 def get_subtitle(annotation, sub_duration, video_clip, seen_annotations):
     if len(annotation["text"]) == 0:
         return None
 
-    txt_clip = TextClip(annotation["text"], color="white", fontsize=70, font='Sans Serif')
+    annotation_txt = calculate_needed_subtitle_height(seen_annotations, annotation, video_clip)
+
+    txt_clip = TextClip(annotation_txt, color="white", fontsize=70, font='Sans Serif')
     txt_clip = txt_clip.set_position(("center", get_subtitle_offset(annotation, seen_annotations, video_clip)))
     txt_clip = txt_clip.set_start(float(annotation["time"]) / 1000.0)
     txt_clip = txt_clip.set_duration(sub_duration)

@@ -1,8 +1,10 @@
 import os
+import re
 import requests
 import shutil
 import tempfile
 import dateutil.parser
+
 
 def download_file(url, end_point):
     """Downloads a file by streaming using the requests module"""
@@ -44,3 +46,14 @@ def parse_iso_date(date):
     parsed = dateutil.parser.parse(date)
 
     return parsed.strftime("%Y.%m.%d %H:%M:%S")
+
+
+def newlinify_string(string, insert_newline_at):
+    lines = []
+    lines_inserted = 0
+    for i in xrange(0, len(string), insert_newline_at):
+        lines_inserted += 1
+        lines.append(string[i:i + insert_newline_at])
+
+    return '\n'.join(lines), lines_inserted
+

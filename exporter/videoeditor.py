@@ -20,8 +20,6 @@ def update_seen_annotations(annotation, seen_annotations):
         seen_annotations[annotation["time"]] += 1
 
 
-
-
 def generate_annotation_markings(video_clip, annotations):
     seen_annotations = {}
     composite_clips = [video_clip]
@@ -35,7 +33,6 @@ def generate_annotation_markings(video_clip, annotations):
         composite_clips.append(marker)
 
         update_seen_annotations(annotation, seen_annotations)
-        print(seen_annotations)
 
     return CompositeVideoClip(composite_clips)
 
