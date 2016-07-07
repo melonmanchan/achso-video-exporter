@@ -33,7 +33,6 @@ def export_videos(videos, email):
                 return jsonify({"message": "A video json was malformed"}), 400
             elif "annotations" not in video_json or not video_json["annotations"]:
                 download_file(video_json["videoUri"], export_dir_name + "/" + video_json["title"] + ".mp4")
-                break
             else:
                 video_uri = video_json["videoUri"]
                 video_filename = video_uri.rsplit("/")[-1]
@@ -42,7 +41,8 @@ def export_videos(videos, email):
                 bake_annotations(video_location, export_dir_name + "/" + video_json["title"] + ".mp4", sorted_annotations)
                 delete_file("../video-cache/" + video_filename)
 
-                export_results["succeeded"].append({"title": video_json["title"], "date": video_json["date"]})
+            export_results["succeeded"].append({"title": video_json["title"], "date": video_json["date"]})
+
         except Exception, e:
             print("EXPORT FAILURE: " + repr(e))
             export_results["failed"].append({"title": video_json["title"], "date": video_json["date"]})
