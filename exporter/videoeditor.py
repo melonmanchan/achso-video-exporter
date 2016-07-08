@@ -4,6 +4,14 @@ import uuid
 
 
 def bake_annotations(video_file, end_point, annotations):
+    """
+    Adds annotation markers and subtitles to a video, then writes it on the filesystem.
+
+    Args:
+        video_file (string): The location of the video file on the file system.
+        end_point (string): Where to store the final video file.
+        annotations (array): An array of annotation dictionaries.
+    """
     clip = VideoFileClip(video_file)
     annotated_video = generate_annotation_markings(clip, annotations)
     final_video = generate_video_pauses(annotated_video, annotations)
@@ -14,6 +22,14 @@ def bake_annotations(video_file, end_point, annotations):
 
 
 def update_seen_annotations(annotation, seen_annotations):
+    """
+    Increments the amount of times an annotation has appeared in the same frame.
+
+    Args:
+        annotation (dict): A single annotation dictionary.
+        seen_annotations (dict): A dictionary with annotation appearance times as the keys, and the number of times they appear
+                                as the value.
+    """
     if not annotation["time"] in seen_annotations:
         seen_annotations[annotation["time"]] = 1
     else:
@@ -21,6 +37,16 @@ def update_seen_annotations(annotation, seen_annotations):
 
 
 def generate_annotation_markings(video_clip, annotations):
+    """
+    Does the actual creation of subtitles and markers, and adds them to a MoviePy composition.
+
+    Args:
+        video_clip (VideoClip): The video to be exported.
+        annotations (array): An array of annotation dictionaries.
+
+    Returns:
+        CompositeAudioClip: A finished MoviePy object with all the audios, videos and such as separate components
+    """
     seen_annotations = {}
     composite_clips = [video_clip]
     one_frame_time = 1 / video_clip.fps
@@ -38,7 +64,16 @@ def generate_annotation_markings(video_clip, annotations):
 
 
 def generate_video_pauses(video_clip, annotations):
-    """Takes in a regular video clip, and bakes in annotation pauses"""
+    """
+    Adds pauses to a video clip for the annotations.
+
+    Args:
+        video_clip (VideoClip): The video to be exported.
+        annotations (array): An array of annotation dictionaries.
+
+    Returns:
+        VideoClip: The clip with the annotation pauses included.
+    """
     for annotation in reversed(annotations):
         pause_time = get_annotation_duration(annotation)
         current_annotation_time = annotation["time"] / 1000.0
@@ -48,6 +83,16 @@ def generate_video_pauses(video_clip, annotations):
 
 
 def generate_pause_audio(original_audio, annotations):
+    """
+    Adds pauses to a audio clip for the annotations.
+
+    Args:
+        original_audio (AudioClip): The original audio to be exported.
+        annotations (array): An array of annotation dictionaries.
+
+    Returns:
+        AudioClip: The clip with the annotation pauses included.
+    """
     audio_clip = original_audio
     last_pause_time = 0
     audio_parts = []
