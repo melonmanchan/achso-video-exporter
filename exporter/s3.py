@@ -36,6 +36,6 @@ def generate_url(filename):
         filename (string): The filename of the file!
 
     Returns:
-        string: A full URL to the file (string).
+        string: A full URL to the file.
     """
     return "https://s3.{0}.amazonaws.com/{1}/{2}".format(config.S3_BUCKET_REGION, config.S3_BUCKET_NAME, filename)
