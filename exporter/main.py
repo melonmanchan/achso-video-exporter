@@ -21,9 +21,15 @@ app = Flask(__name__)
 celery = make_celery(app)
 
 
-# Exporting videos is performed in seperate process from main server
 @celery.task(name='exporter.tasks.export_videos')
 def export_videos(videos, email):
+    """
+    Exporting videos is done in a seperate Celery process from the Flask handler.
+
+    Args:
+        videos (array): Array of video objects (See README.md for general idea of formats).
+        email (string): Email address (string) where a download link of the export results will be sent.
+    """
     export_dir_name = create_temp_dir()
     export_results = {"succeeded": [], "failed": []}
 
@@ -61,6 +67,9 @@ def export_videos(videos, email):
 
 @app.route("/", methods=["POST"])
 def index():
+    """
+    The main handler for the app. Validates the request, and if everything seems ok, add it to the task queue.
+    """
     request_json = request.get_json()
 
     if "email" not in request_json:
