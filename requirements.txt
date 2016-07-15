@@ -7,6 +7,7 @@ celery==3.1.23
 decorator==4.0.9
 docutils==0.12
 Flask==0.10.1
+Flask-Cors==2.1.2
 futures==3.0.5
 imageio==1.5
 itsdangerous==0.24

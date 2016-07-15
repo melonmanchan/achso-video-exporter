@@ -3,6 +3,7 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
+from flask_cors import CORS, cross_origin
 
 import uuid
 
@@ -11,7 +12,6 @@ from annotations import sort_annotations_by_time, is_annotation_json_valid
 from s3 import upload_file
 from mailer import send_download_link
 from tasks import make_celery
-from decorators import crossdomain
 
 
 from videoeditor import bake_annotations
@@ -19,6 +19,8 @@ from videoeditor import bake_annotations
 import config
 
 app = Flask(__name__)
+
+CORS(app)
 
 celery = make_celery(app)
 
@@ -68,7 +70,6 @@ def export_videos(videos, email):
 
 
 @app.route("/", methods=["POST", "OPTIONS"])
-@crossdomain(origin="*")
 def index():
     """
     The main handler for the app. Validates the request, and if everything seems ok, add it to the task queue.
