@@ -70,6 +70,7 @@ def export_videos(videos, email):
 
 
 @app.route("/", methods=["POST", "OPTIONS"])
+@cross_origin()
 def index():
     """
     The main handler for the app. Validates the request, and if everything seems ok, add it to the task queue.
