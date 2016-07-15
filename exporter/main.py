@@ -11,6 +11,8 @@ from annotations import sort_annotations_by_time, is_annotation_json_valid
 from s3 import upload_file
 from mailer import send_download_link
 from tasks import make_celery
+from decorators import crossdomain
+
 
 from videoeditor import bake_annotations
 
@@ -65,7 +67,8 @@ def export_videos(videos, email):
     send_download_link(email, export_results)
 
 
-@app.route("/", methods=["POST"])
+@app.route("/", methods=["POST", "OPTIONS"])
+@crossdomain(origin="*")
 def index():
     """
     The main handler for the app. Validates the request, and if everything seems ok, add it to the task queue.
