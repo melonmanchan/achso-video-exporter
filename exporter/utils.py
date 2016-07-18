@@ -36,6 +36,8 @@ def is_email_valid(email):
        bool: Whether or not email was valid
 
     """
+    # Parseaddrs returns a tuple with the real name and the actual address
+    # If the address is not valid, the tuple is empty.
     return '@' in parseaddr(email)[1]
 
 def create_temp_dir():
