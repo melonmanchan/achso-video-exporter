@@ -4,6 +4,8 @@ import shutil
 import tempfile
 import dateutil.parser
 
+from email.utils import parseaddr
+
 
 def download_file(url, end_point):
     """
@@ -23,6 +25,18 @@ def download_file(url, end_point):
                 f.write(chunk)
     return end_point
 
+
+def is_email_valid(email):
+    """
+    Validates string as a valid email address
+    Args:
+        email (string): String to validate as email
+
+    Returns:
+       bool: Whether or not email was valid
+
+    """
+    return '@' in parseaddr(email)[1]
 
 def create_temp_dir():
     """
@@ -57,7 +71,7 @@ def delete_dir(dir_to_delete):
 def zip_up_dir(folder_to_zip, zip_endpoint):
     """
     Creates a .zip file from a directory.
-
+ 
     Args:
         folder_to_zip (string): The location of the directory to create a zip file from.
         zip_endpoint (string): The place to put the finished zip.

@@ -7,7 +7,7 @@ from flask_cors import CORS, cross_origin
 
 import uuid
 
-from utils import download_file, create_temp_dir, zip_up_dir, delete_dir, is_video_json_valid, delete_file
+from utils import download_file, create_temp_dir, zip_up_dir, delete_dir, is_video_json_valid, delete_file, is_email_valid
 from annotations import sort_annotations_by_time, is_annotation_json_valid
 from s3 import upload_file
 from mailer import send_download_link
@@ -86,6 +86,10 @@ def index():
     email = request_json["email"]
     videos = request_json["videos"]
 
+    if not is_email_valid(email):
+        return jsonify({"message": "Email address {0} was malformed!".format(email)}), 400
+
+
     # Allow both plain JSON objects and arrays
     if type(videos) is dict:
         videos = [videos]
@@ -101,4 +105,4 @@ def index():
     return jsonify({"message": "Video export queued succesfully"}), 201
 
 if __name__ == "__main__":
-    app.run(debug=config.DEBUG, host=config.HOST, port=config.PORT)
+  app.run(debug=config.DEBUG, host=config.HOST, port=config.PORT)
