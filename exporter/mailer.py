@@ -99,7 +99,7 @@ def render_mail_content(data):
     """
     content = """<html>
                          <h1>Your videos are ready</h1>
-                         <p>Hello! Your download link is {0}</>
+                         <p>Hello! Your download link is {0}. This download will expire in 30 days from now</p>
                          {1}
                          {2}
                   </html>""".format(render_download_link(data["url"]), render_success(data), render_failure(data))
