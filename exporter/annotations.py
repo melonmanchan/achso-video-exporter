@@ -121,8 +121,7 @@ def calculate_needed_subtitle_height(annotation, seen_annotations, video_clip):
         string: The annotation subtitle with possible added line breaks.
     """
     width = video_clip.w
-    text = annotation["text"]
-
+    text = annotation["text"].encode('utf-8')
     if len(text) > width / 40:
         text, lines_inserted = newlinify_string(text, int(width / 40))
         add_to_subtitle_offset(annotation, seen_annotations, lines_inserted - 1)
