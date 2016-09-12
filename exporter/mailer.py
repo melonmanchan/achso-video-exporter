@@ -35,7 +35,8 @@ def render_list_elements(elements):
     """
     output = ""
     for el in elements:
-        output += "<li>{0} (Last updated at {1})</li>".format(el["title"], parse_iso_date(el["date"]))
+        utf_title = el["title"].encode('utf-8')
+        output += "<li>{0} (Last updated at {1})</li>".format(utf_title, parse_iso_date(el["date"]))
     return output
 
 
