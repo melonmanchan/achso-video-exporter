@@ -6,11 +6,9 @@ marker_image = ImageClip(os.path.join(os.path.dirname(__file__), "./AS_annotatio
 
 ANNOTATION_INITIAL_PAUSE_TIME = 1.0
 """float: The minimum default pause time for an annotation. """
-SUBTILE_OFFSET = 70
-"""int: The spacing between subtitles that span multiple lines in one pause frame. """
 
 
-def get_subtitle_offset(annotation, seen_annotations, clip):
+def get_subtitle_offset(annotation, seen_annotations, clip, font_size):
     """
     Gets the Y offset for a subtitle, which depends on the amount of other subtitles in the same frame, starting from the bottom of the screen.
 
@@ -24,9 +22,9 @@ def get_subtitle_offset(annotation, seen_annotations, clip):
         int: The location of the subtitle on the Y axis in pixels
     """
     if not annotation["time"] in seen_annotations:
-        return clip.h - SUBTILE_OFFSET
+        return (clip.h - font_size) 
     else:
-        return clip.h - SUBTILE_OFFSET * (seen_annotations[annotation["time"]] + 1)
+        return (clip.h - font_size * (seen_annotations[annotation["time"]] + 1))
 
 
 def add_to_subtitle_offset(annotation, seen_annotations, value):
@@ -39,8 +37,6 @@ def add_to_subtitle_offset(annotation, seen_annotations, value):
                                 as the value.
         value (int): The value the key in seen_annotations should be incremented by.
 
-    Returns:
-        int: The location of the subtitle on the Y axis in pixels.
     """
     if not annotation["time"] in seen_annotations:
         seen_annotations[annotation["time"]] = value
@@ -146,10 +142,12 @@ def get_subtitle(annotation, sub_duration, video_clip, seen_annotations):
     if len(annotation["text"]) == 0:
         return None
 
+    font_size = int((video_clip.h / 15))
+
     annotation_txt = calculate_needed_subtitle_height(annotation, seen_annotations, video_clip)
 
-    txt_clip = TextClip(annotation_txt, color="white", fontsize=70, font='Sans Serif')
-    txt_clip = txt_clip.set_position(("center", get_subtitle_offset(annotation, seen_annotations, video_clip)))
+    txt_clip = TextClip(annotation_txt, color="white", fontsize=font_size, font='Sans Serif')
+    txt_clip = txt_clip.set_position(("center", get_subtitle_offset(annotation, seen_annotations, video_clip, font_size)))
     txt_clip = txt_clip.set_start(float(annotation["time"]) / 1000.0)
     txt_clip = txt_clip.set_duration(sub_duration)
 
